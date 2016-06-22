@@ -1,6 +1,10 @@
 # Tactel
 Unity utilities and scripts for video game creation.
 
+If you distribute binaries, give attribution on credits.
+
+If you want to contribute, branch the project.
+
 ---
 
 UIManager: Change all your UI with a simple call to method ChangeView(UIViews view).
