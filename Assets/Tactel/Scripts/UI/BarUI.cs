@@ -64,7 +64,7 @@ public class BarUI : MonoBehaviour
     /// <param name="percentage">quantity</param>
     /// <param name="duration">time</param>
     /// <returns></returns>
-    IEnumerator GrowAnimated(float percentage = percentage, float duration = duration)
+    public IEnumerator GrowAnimated(float percentage = percentage, float duration = duration)
     {
         canIModify = false;
         float baseX = mask.rectTransform.anchoredPosition.x;
@@ -87,7 +87,7 @@ public class BarUI : MonoBehaviour
     /// <param name="percentage">quantity</param>
     /// <param name="duration">time</param>
     /// <returns></returns>
-    IEnumerator DecreaseAnimated(float percentage = percentage, float duration = duration)
+    public IEnumerator DecreaseAnimated(float percentage = percentage, float duration = duration)
     {
         canIModify = false;
         float baseX = mask.rectTransform.anchoredPosition.x;
