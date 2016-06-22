@@ -1,0 +1,789 @@
+fileFormatVersion: 2
+guid: 5bedd595045ed3149b5246500e2ec45d
+timeCreated: 1465569552
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: background-pattern
+    21300002: bad_1
+    21300004: bad_1_border
+    21300006: bad_2
+    21300008: bad_2_border
+    21300010: bad_3
+    21300012: bad_3_border
+    21300014: bad_4
+    21300016: bad_4_border
+    21300018: bad_5
+    21300020: bad_5_border
+    21300022: bad_error
+    21300024: character_choose_btn
+    21300026: cinta
+    21300028: combo_background
+    21300030: combo_track
+    21300032: fb_icon
+    21300034: game_over
+    21300036: gamecenter_btn
+    21300038: good_1
+    21300040: good_1_border
+    21300042: good_2
+    21300044: good_2_border
+    21300046: good_3
+    21300048: good_3_border
+    21300050: good_4
+    21300052: good_4_border
+    21300054: good_5
+    21300056: good_5_border
+    21300058: good_error
+    21300060: green_btn
+    21300062: greenshot
+    21300064: greenshots_btn
+    21300066: hero_label_green
+    21300068: hero_label_white
+    21300070: levelUp-bad
+    21300072: levelUp-good
+    21300074: levelup_background
+    21300076: logo
+    21300078: magic_pea
+    21300080: magic_pea_counter
+    21300082: noads_btn
+    21300084: paperbag
+    21300086: platform
+    21300088: play_btn
+    21300090: restore_purchases_btn
+    21300092: topnav_bg
+    21300094: topnav_item-1-active
+    21300096: topnav_item-1-inactive
+    21300098: topnav_item-2-active
+    21300100: topnav_item-2-inactive
+    21300102: topnav_item-3-active
+    21300104: topnav_item-3-inactive
+    21300106: trash_low
+    21300108: trash_up_closed
+    21300110: trash_up_opened
+    21300112: tw_icon
+    21300114: unlock_btn
+    21300116: unlock_character_currency_btn
+    21300118: unlock_character_money_btn
+    21300120: upgrade_btn
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 512
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 20
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: background-pattern
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 503
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_1
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 481
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_1_border
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 432
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_2
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 480
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_2_border
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 446
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_3
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 480
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_3_border
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 497
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_4
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 480
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_4_border
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 487
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_5
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 480
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_5_border
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 454
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: bad_error
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 230
+        width: 35
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: character_choose_btn
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 407
+        width: 47
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: cinta
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 116
+        width: 19
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: combo_background
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 294
+        width: 94
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: combo_track
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 506
+        width: 1
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: fb_icon
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 383
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: game_over
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 191
+        width: 60
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: gamecenter_btn
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 290
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 472
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_1_border
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 427
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_2
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 470
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_2_border
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 451
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_3
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 464
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_3_border
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 463
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_4
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 463
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_4_border
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 463
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_5
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 463
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_5_border
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 497
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: good_error
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 195
+        width: 35
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: green_btn
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 387
+        width: 45
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: greenshot
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 499
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: greenshots_btn
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 339
+        width: 86
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: hero_label_green
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 497
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: hero_label_white
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 489
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: levelUp-bad
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 260
+        width: 30
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: levelUp-good
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 256
+        width: 30
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: levelup_background
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 154
+        width: 44
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: logo
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 94
+        width: 80
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: magic_pea
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 406
+        width: 22
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: magic_pea_counter
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 498
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: noads_btn
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 319
+        width: 86
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: paperbag
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 265
+        width: 23
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: platform
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 6
+        width: 30
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: play_btn
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 359
+        width: 46
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: restore_purchases_btn
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 446
+        width: 38
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: topnav_bg
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 226
+        width: 68
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: topnav_item-1-active
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 427
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: topnav_item-1-inactive
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 427
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: topnav_item-2-active
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 427
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: topnav_item-2-inactive
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 427
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: topnav_item-3-active
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 408
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: topnav_item-3-inactive
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 408
+        width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: trash_low
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 266
+        width: 21
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: trash_up_closed
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 504
+        width: 23
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: trash_up_opened
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 446
+        width: 25
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tw_icon
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 363
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: unlock_btn
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 343
+        width: 25
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: unlock_character_currency_btn
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 386
+        width: 45
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: unlock_character_money_btn
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 367
+        width: 45
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: upgrade_btn
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 315
+        width: 25
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
