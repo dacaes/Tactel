@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Tactel.Extensions;
 
 namespace Tactel.UI
 {
@@ -21,15 +22,24 @@ namespace Tactel.UI
 			Menu = (1 << 0),
 			Game = (1 << 1),
 			GameOver = (1 << 2),
+			Anim_1 = (1 << 3),
+			Anim_2 = (1 << 4),
 		}
 
-		[SerializeField]
-		private UIViews currentView;
+		
 #if UNITY_EDITOR
 		public bool changeView;
+		public UIViews theView;
 #endif
+		[Header("To animate transitions back")]
 		[SerializeField]
-		private bool mode;
+		private bool reverseAnimation = false;
+
+		private UIViews currentView;
+		private UIViews auxView;
+		private bool secondaryMode;
+
+		[Header("Lists")]
 		public List<UIMovableElement> movableElements = new List<UIMovableElement>();
 		public List<UIFadingElement> fadingElements = new List<UIFadingElement>();
 		public List<UIToggleableElement> toggleableElements = new List<UIToggleableElement>();
@@ -42,7 +52,7 @@ namespace Tactel.UI
 
 		void Awake()
 		{
-			if (!GameObject.Find("TACTEL"))
+            if (!GameObject.Find("TACTEL"))
 			{
 				GameObject g = new GameObject();
 				g.name = "TACTEL";
@@ -73,10 +83,17 @@ namespace Tactel.UI
 								element.outTransform = pos;
 							}
 						}
+
+						if(!element.inTransform)	//By default its position is In position
+						{
+							Debug.LogWarning("No In position found. Got " + element.transform.name + " position for In by default.");
+							element.inTransform = element.transform;	//we get the position and store it after.
+						}
 					}
-					else
+
+					if(!element.outTransform)
 					{
-						Debug.LogError(element + " has no position/s for its movement.");
+						Debug.LogError(element.transform.name + " has no Out position for its movement.");
 					}
 				}
 
@@ -159,56 +176,96 @@ namespace Tactel.UI
 			ChangeView(UIViews.Menu);
 		}
 
+		List<UIViews> CreateSequence(UIViews goal)
+		{
+			List<UIViews> sequence = new List<UIViews>();
+
+			//trackback currentView
+
+			if(reverseAnimation)
+			{
+				sequence.Add(currentView);
+				Debug.Log(currentView);
+				UIViews previousView;
+				while (NextView(sequence[sequence.Count - 1], out previousView, true))
+				{
+					//UIViews aux = previousView;
+					sequence.Add(previousView);
+				}
+				sequence.RemoveAt(0);
+			}
+
+			sequence.Add(goal);
+
+			UIViews nextView;
+			while (NextView(sequence[sequence.Count-1], out nextView))
+			{
+				sequence.Add(nextView);
+			}
+
+			return sequence;
+		}
+
+		IEnumerator FollowSequence(List<UIViews> sequence, System.Action<bool> callback)
+		{
+			Debug.Log(changing);
+
+			foreach(UIViews v in sequence)
+			{
+				Debug.Log(v.ToString());
+			}
+
+			for (int i = 0; i < sequence.Count;)
+			{
+				if (!changing)
+				{
+					if (secondaryMode)
+					{
+						Change(sequence[i], (bool callback0) =>
+						{
+							if (callback0)
+							{
+								changing = false;
+								i++;
+							}
+						});
+					}
+					else
+					{
+						Change2(sequence[i], (bool callback0) =>
+						{
+							if (callback0)
+							{
+								changing = false;
+								i++;
+							}
+						});
+					}
+				}
+				yield return null;
+			}
+			
+			callback(true);
+		}
+
 		public void ChangeView(UIViews view)
 		{
 			Debug.Log("--------------Change view to: " + view);
-			if (!changing)
-			{
-				if (mode)
-				{
-					Change(view, (bool callback0) =>
-					{
-						changing = false;
-					});
-				}
-				else
-				{
-					Change2(view, (bool callback0) =>
-					{
-						changing = false;
-					});
-				}
-			}
+
+			StartCoroutine(FollowSequence(CreateSequence(view),(bool callback) => { }));
 		}
 
 		public void ChangeView(UIViews view, System.Action<bool> callback)
 		{
 			Debug.Log("--------------Change view to: " + view);
-			if (!changing)
+
+			StartCoroutine(FollowSequence(CreateSequence(view), (bool callback2) => 
 			{
-				if (mode)
+				if(callback2)
 				{
-					Change(view, (bool callback0) =>
-					{
-						if (callback0)
-						{
-							changing = false;
-							callback(true);
-						}
-					});
+					callback(true);
 				}
-				else
-				{
-					Change2(view, (bool callback0) =>
-					{
-						if (callback0)
-						{
-							changing = false;
-							callback(true);
-						}
-					});
-				}
-			}
+			}));
 		}
 
 		void Change(UIViews view, System.Action<bool> callback0)
@@ -856,6 +913,33 @@ namespace Tactel.UI
 			return true;
 		}
 
+		bool NextView(UIViews view, out UIViews nextView, bool previous = false)
+		{
+			nextView = default(UIViews);
+			string viewString = view.ToString();
+
+			string[] parts = viewString.Split('_');
+
+			if(parts.Length == 2)
+			{
+				int nextViewNumber = System.Int32.Parse(parts[1]);
+				if (!previous)
+				{
+					nextViewNumber++;
+				}
+				else
+				{
+					nextViewNumber--;	//Find previous
+				}
+
+				if (nextView.TryParse<UIViews>((parts[0] + "_" + nextViewNumber), out nextView))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		/*
 		///Preparing for waitings between actions.
 		IEnumerator WaitForSeconds(float seconds, System.Action<bool> callback)
@@ -871,7 +955,10 @@ namespace Tactel.UI
 			if (changeView)
 			{
 				changeView = false;
-				ChangeView(currentView);
+				ChangeView(theView, (bool callback) =>
+				{
+					Debug.Log("FIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIN");
+				});
 			}
 		}
 #endif
