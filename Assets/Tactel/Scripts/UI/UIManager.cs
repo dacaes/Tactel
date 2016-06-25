@@ -169,12 +169,16 @@ namespace Tactel.UI
 
 		void Start()
 		{
+#if UNITY_EDITOR
+			Reset(theView);
+#else
 			Reset();
+#endif
 		}
 
-		public void Reset()
+		public void Reset(UIViews view = UIViews.Menu)
 		{
-			ChangeView(UIViews.Menu);
+			ChangeView(view);
 		}
 
 		List<UIViews> CreateSequences(UIViews goal)
@@ -298,24 +302,48 @@ namespace Tactel.UI
 			callback(true);
 		}
 
-		public void ChangeView(UIViews view)
+		public void ChangeView(UIViews view, bool direct = false)
 		{
 			Debug.Log("--------------Change view to: " + view);
 
-			StartCoroutine(FollowSequence(CreateSequences(view), (bool callback) => {}));
+			if (!direct)
+			{
+				StartCoroutine(FollowSequence(CreateSequences(view), (bool callback) => { }));
+			}
+			else
+			{
+				List<UIViews> list = new List<UIViews>();
+				list.Add(view);
+				StartCoroutine(FollowSequence(list, (bool callback) => { }));
+			}
 		}
 
-		public void ChangeView(UIViews view, System.Action<bool> callback)
+		public void ChangeView(UIViews view, System.Action<bool> callback, bool direct = false)
 		{
 			Debug.Log("--------------Change view to: " + view);
 
-			StartCoroutine(FollowSequence(CreateSequences(view), (bool callback2) =>
+			if (!direct)
 			{
-				if (callback2)
+				StartCoroutine(FollowSequence(CreateSequences(view), (bool callback2) =>
 				{
-					callback(true);
-				}
-			}));
+					if (callback2)
+					{
+						callback(true);
+					}
+				}));
+			}
+			else
+			{
+				List<UIViews> list = new List<UIViews>();
+				list.Add(view);
+				StartCoroutine(FollowSequence(list, (bool callback2) =>
+				{
+					if (callback2)
+					{
+						callback(true);
+					}
+				}));
+			}
 		}
 
 		void Change(UIViews view, System.Action<bool> callback0)
