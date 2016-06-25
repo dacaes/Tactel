@@ -1,7 +1,12 @@
 # Tactel
 Unity utilities and scripts for video game creation.
 
-If you distribute binaries, give attribution on credits.
+If you distribute binaries, give attribution on credits:
+
+UIManager by Daniel Castaño Estrella
+daniel.c.estrella@gmail.com
+https://github.com/danielcestrella
+
 
 If you want to contribute, branch the project.
 
@@ -10,10 +15,27 @@ If you want to contribute, branch the project.
 UIManager: Change all your UI with a simple call to method ChangeView(UIViews view).
 You can set different elements to every view, and set them to different views.
 
-Thinking about make auto call views. Example: You change to Menu1 doing:
-myUIManager.ChangeView(UIVIews.Menu1);
+Create animations using ViewName_Number pattern.
 
-and after end the animations fo the change make call automatically Menu2. Settings delays between atomatic changes would create cool animations.
+Example: Anim_1, Anim_2, Anim_3.
+
+If you change view to Anim_2 you will see Anim_1 before.
+You can avoid animations using ChangeView(view, true);
+
+You can chose to see backtrack animations, true by default.
+
+Example:
+
+Anim_1, Anim_2
+Menu_1, Menu_2
+
+You are on *Anim_2*, and you change to *Menu_2*. With backtrack animation you will see: Anim_2 -> Anim_1 -> Menu_1 -> Menu_2.
+
+On movable elements you can choose manually **IN** and **OUT** transforms, but UIManager finds automatically **UIManagerPositions** GameObject and looks for *ObjectNameIn* and *ObjectNameOut* transforms. You can use a gameObject for 2 elements position naming like *ObjectName1Out ObjectName2Out*.
+
+If UIManager doesn't find IN transform, it gets object initial position by default.
+
+Thinking about adding delays.
 
 ---
 
