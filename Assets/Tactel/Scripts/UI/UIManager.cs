@@ -24,6 +24,7 @@ namespace Tactel.UI
 			GameOver = (1 << 2),
 			Anim_1 = (1 << 3),
 			Anim_2 = (1 << 4),
+			Anim_3 = (1 << 5),
 		}
 
 		
@@ -31,9 +32,9 @@ namespace Tactel.UI
 		public bool changeView;
 		public UIViews theView;
 #endif
-		[Header("To animate transitions back")]
+		[Header("Anim back. Default true")]
 		[SerializeField]
-		private bool reverseAnimation = false;
+		private bool reverseAnimation = true;
 
 		private UIViews currentView;
 		private UIViews auxView;
@@ -176,45 +177,94 @@ namespace Tactel.UI
 			ChangeView(UIViews.Menu);
 		}
 
-		List<UIViews> CreateSequence(UIViews goal)
+		List<UIViews> CreateSequences(UIViews goal)
 		{
 			List<UIViews> sequence = new List<UIViews>();
+			string[] goalParts = goal.ToString().Split('_');
+			string[] currentParts = currentView.ToString().Split('_');
 
-			//trackback currentView
-
-			if(reverseAnimation)
+			if (goalParts[0] == currentParts[0])
 			{
-				sequence.Add(currentView);
-				Debug.Log(currentView);
-				UIViews previousView;
-				while (NextView(sequence[sequence.Count - 1], out previousView, true))
+				if (int.Parse(goalParts[1]) > int.Parse(currentParts[1]))
 				{
-					//UIViews aux = previousView;
-					sequence.Add(previousView);
+					sequence.Add(goal);
+					UIViews nextView;
+					while (NextView(sequence[sequence.Count - 1], out nextView, true))
+					{
+						if (nextView == currentView)
+						{
+							break;
+						}
+
+						sequence.Add(nextView);
+					}
+
+					sequence.Reverse();
+					return sequence;
 				}
-				sequence.RemoveAt(0);
+				else if (int.Parse(goalParts[1]) < int.Parse(currentParts[1]))
+				{
+					sequence.Add(currentView);
+					UIViews nextView;
+					while (NextView(sequence[sequence.Count - 1], out nextView, true))
+					{
+						sequence.Add(nextView);
+
+						if (nextView == goal)
+						{
+							break;
+						}
+					}
+
+					return sequence;
+				}
+				else
+				{
+					sequence.Add(currentView);
+					return sequence;
+				}
 			}
-
-			sequence.Add(goal);
-
-			UIViews nextView;
-			while (NextView(sequence[sequence.Count-1], out nextView))
+			else
 			{
-				sequence.Add(nextView);
-			}
+				//trackback currentView
 
-			return sequence;
+				if (reverseAnimation)
+				{
+					sequence.Add(currentView);
+					UIViews previousView;
+					while (NextView(sequence[sequence.Count - 1], out previousView, true))
+					{
+						//UIViews aux = previousView;
+						sequence.Add(previousView);
+					}
+					sequence.RemoveAt(0);
+				}
+
+				List<UIViews> forwardSequence = new List<UIViews>();
+				forwardSequence.Add(goal);
+
+				if (goal != currentView)
+				{
+					UIViews nextView;
+					while (NextView(forwardSequence[forwardSequence.Count - 1], out nextView, true))
+					{
+						forwardSequence.Add(nextView);
+					}
+
+					forwardSequence.Reverse();
+				}
+
+				foreach(UIViews v in forwardSequence)
+				{
+					sequence.Add(v);
+				}
+
+				return sequence;
+			}
 		}
 
 		IEnumerator FollowSequence(List<UIViews> sequence, System.Action<bool> callback)
 		{
-			Debug.Log(changing);
-
-			foreach(UIViews v in sequence)
-			{
-				Debug.Log(v.ToString());
-			}
-
 			for (int i = 0; i < sequence.Count;)
 			{
 				if (!changing)
@@ -252,16 +302,16 @@ namespace Tactel.UI
 		{
 			Debug.Log("--------------Change view to: " + view);
 
-			StartCoroutine(FollowSequence(CreateSequence(view),(bool callback) => { }));
+			StartCoroutine(FollowSequence(CreateSequences(view), (bool callback) => {}));
 		}
 
 		public void ChangeView(UIViews view, System.Action<bool> callback)
 		{
 			Debug.Log("--------------Change view to: " + view);
 
-			StartCoroutine(FollowSequence(CreateSequence(view), (bool callback2) => 
+			StartCoroutine(FollowSequence(CreateSequences(view), (bool callback2) =>
 			{
-				if(callback2)
+				if (callback2)
 				{
 					callback(true);
 				}
@@ -574,8 +624,7 @@ namespace Tactel.UI
 
 		bool EnterMovables(System.Action<bool> callback)
 		{
-			Debug.Log("Enter movables.");
-			int i = 0;
+			//Debug.Log("Enter movables.");
 
 			List<UIMovableElement> changingElements = new List<UIMovableElement>();
 
@@ -594,6 +643,7 @@ namespace Tactel.UI
 				return false;
 			}
 
+			int i = 0;
 			foreach (UIMovableElement element in changingElements)
 			{
 				i++;
@@ -623,8 +673,7 @@ namespace Tactel.UI
 
 		bool LeaveMovables(System.Action<bool> callback)
 		{
-			Debug.Log("Leave movables.");
-			int i = 0;
+			//Debug.Log("Leave movables.");
 
 			List<UIMovableElement> changingElements = new List<UIMovableElement>();
 
@@ -632,6 +681,7 @@ namespace Tactel.UI
 			{
 				if (!((element.views & currentView) != 0) && element.onView)    //movable leave
 				{
+					Debug.Log("se pira de " + currentView);
 					changingElements.Add(element);
 				}
 			}
@@ -643,6 +693,7 @@ namespace Tactel.UI
 				return false;
 			}
 
+			int i = 0;
 			foreach (UIMovableElement element in changingElements)
 			{
 				i++;
@@ -673,8 +724,7 @@ namespace Tactel.UI
 
 		bool EnterFadings(System.Action<bool> callback)
 		{
-			Debug.Log("Enter fadings.");
-			int i = 0;
+			//Debug.Log("Enter fadings.");
 
 			List<UIFadingElement> changingElements = new List<UIFadingElement>();
 
@@ -693,6 +743,7 @@ namespace Tactel.UI
 				return false;
 			}
 
+			int i = 0;
 			foreach (UIFadingElement element in changingElements)
 			{
 				i++;
@@ -722,8 +773,7 @@ namespace Tactel.UI
 
 		bool LeaveFadings(System.Action<bool> callback)
 		{
-			Debug.Log("Leave Fadings.");
-			int i = 0;
+			//Debug.Log("Leave Fadings.");
 
 			List<UIFadingElement> changingElements = new List<UIFadingElement>();
 
@@ -742,6 +792,7 @@ namespace Tactel.UI
 				return false;
 			}
 
+			int i = 0;
 			foreach (UIFadingElement element in changingElements)
 			{
 				i++;
@@ -779,7 +830,7 @@ namespace Tactel.UI
 
 		void EnterToggleables()
 		{
-			Debug.Log("Enter toggleables.");
+			//Debug.Log("Enter toggleables.");
 			foreach (UIToggleableElement element in toggleableElements)
 			{
 				if ((element.views & currentView) != 0 && !element.onView)    //has to enter view
@@ -796,7 +847,7 @@ namespace Tactel.UI
 
 		void LeaveToggleables()
 		{
-			Debug.Log("Leave toggleables.");
+			//Debug.Log("Leave toggleables.");
 			foreach (UIToggleableElement element in toggleableElements)
 			{
 				if (!((element.views & currentView) != 0) && element.onView)    //toggleable leave
@@ -809,8 +860,7 @@ namespace Tactel.UI
 
 		bool EnterScalables(System.Action<bool> callback)
 		{
-			Debug.Log("Enter scalables.");
-			int i = 0;
+			//Debug.Log("Enter scalables.");
 
 			List<UIScalableElement> changingElements = new List<UIScalableElement>();
 
@@ -829,6 +879,7 @@ namespace Tactel.UI
 				return false;
 			}
 
+			int i = 0;
 			foreach (UIScalableElement element in changingElements)
 			{
 				i++;
@@ -858,8 +909,7 @@ namespace Tactel.UI
 
 		bool LeaveScalables(System.Action<bool> callback)
 		{
-			Debug.Log("Leave scalables.");
-			int i = 0;
+			//Debug.Log("Leave scalables.");
 
 			List<UIScalableElement> changingElements = new List<UIScalableElement>();
 
@@ -878,6 +928,7 @@ namespace Tactel.UI
 				return false;
 			}
 
+			int i = 0;
 			foreach (UIScalableElement element in changingElements)
 			{
 				i++;
@@ -922,7 +973,7 @@ namespace Tactel.UI
 
 			if(parts.Length == 2)
 			{
-				int nextViewNumber = System.Int32.Parse(parts[1]);
+				int nextViewNumber = int.Parse(parts[1]);
 				if (!previous)
 				{
 					nextViewNumber++;
@@ -957,7 +1008,7 @@ namespace Tactel.UI
 				changeView = false;
 				ChangeView(theView, (bool callback) =>
 				{
-					Debug.Log("FIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIN");
+					Debug.Log("END OF VIEW CHANGE");
 				});
 			}
 		}
