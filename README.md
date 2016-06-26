@@ -35,7 +35,7 @@ On movable elements you can choose manually **IN** and **OUT** transforms, but U
 
 If UIManager doesn't find IN transform, it gets object initial position by default.
 
-Thinking about adding delays.
+You can add post delays to views with Views postdelay array.
 
 ---
 
