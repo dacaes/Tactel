@@ -27,7 +27,8 @@ namespace Tactel.UI
 			Anim_3 = (1 << 5),
 		}
 
-		
+		[System.Serializable] public class Delay {public UIViews view; public float delay; }
+
 #if UNITY_EDITOR
 		public bool changeView;
 		public UIViews theView;
@@ -36,15 +37,20 @@ namespace Tactel.UI
 		[SerializeField]
 		private bool reverseAnimation = true;
 
-		private UIViews currentView;
-		private UIViews auxView;
-		private bool secondaryMode;
-
-		[Header("Lists")]
+		[Header("UI Elements")]
 		public List<UIMovableElement> movableElements = new List<UIMovableElement>();
 		public List<UIFadingElement> fadingElements = new List<UIFadingElement>();
 		public List<UIToggleableElement> toggleableElements = new List<UIToggleableElement>();
 		public List<UIScalableElement> scalableElements = new List<UIScalableElement>();
+
+		[Header("View postdelay")]
+		[SerializeField]
+		public Delay[] delays;
+
+		private UIViews currentView;
+		private UIViews auxView;
+		private bool secondaryMode;
+
 		private Movement movement;
 		private Fading fading;
 		private Scaling scaling;
@@ -279,8 +285,25 @@ namespace Tactel.UI
 						{
 							if (callback0)
 							{
-								changing = false;
-								i++;
+								//look for a delay after the view
+								bool delay = false;
+								foreach (Delay d in delays)
+								{
+									if (d.view == sequence[i])
+									{
+										delay = true;
+										StartCoroutine(WaitForSeconds(d.delay, (bool callback2) =>
+										{
+											changing = false;
+											i++;
+										}));
+									}
+								}
+								if (!delay)
+								{
+									changing = false;
+									i++;
+								}
 							}
 						});
 					}
@@ -290,8 +313,25 @@ namespace Tactel.UI
 						{
 							if (callback0)
 							{
-								changing = false;
-								i++;
+								//look for a delay after the view
+								bool delay = false;
+								foreach (Delay d in delays)
+								{
+									if (d.view == sequence[i])
+									{
+										delay = true;
+										StartCoroutine(WaitForSeconds(d.delay, (bool callback2) =>
+										{
+											changing = false;
+											i++;
+										}));
+									}
+								}
+								if (!delay)
+								{
+									changing = false;
+									i++;
+								}
 							}
 						});
 					}
@@ -709,7 +749,6 @@ namespace Tactel.UI
 			{
 				if (!((element.views & currentView) != 0) && element.onView)    //movable leave
 				{
-					Debug.Log("se pira de " + currentView);
 					changingElements.Add(element);
 				}
 			}
@@ -1019,14 +1058,12 @@ namespace Tactel.UI
 			return false;
 		}
 
-		/*
-		///Preparing for waitings between actions.
+		///Waitings after views.
 		IEnumerator WaitForSeconds(float seconds, System.Action<bool> callback)
 		{
 			yield return new WaitForSeconds(seconds);
 			callback(true);
 		}
-		*/
 
 #if UNITY_EDITOR
 		void Update()
