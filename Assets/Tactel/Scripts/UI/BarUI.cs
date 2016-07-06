@@ -1,8 +1,8 @@
 ﻿#region LICENSE
 //==============================================================================//
-//  Copyright (c) 2016 Daniel Castaño Estrella                                  //
-//  This projected is licensed under the terms of the MIT license.              //
-//  See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT //
+//	Copyright (c) 2016 Daniel Castaño Estrella									//
+//	This projected is licensed under the terms of the MIT license.				//
+//	See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT	//
 //==============================================================================//
 #endregion
 
@@ -26,7 +26,9 @@ public class BarUI : MonoBehaviour
 	private Vector2 barEmptyAnchor;
 	private float barAnchorY;
 	private float width;
-	private bool canIModify;
+	private float theoricCurrentX;
+
+	public bool modifying { get; private set;}
 
 #if UNITY_EDITOR
 	public bool grow;
@@ -36,15 +38,20 @@ public class BarUI : MonoBehaviour
 	#endregion
 
 	#region functions
+	protected virtual void Change(float percentage)
+	{
+		float newAnchorX = mask.rectTransform.anchoredPosition.x + width * 1 / percentage;
+		if (newAnchorX <= barFullAnchorX && newAnchorX >= barEmptyAnchor.x)
+			mask.rectTransform.anchoredPosition = new Vector2(newAnchorX, barAnchorY);
+	}
+
 	/// <summary>
 	/// Grow the percentage given.
 	/// </summary>
 	/// <param name="percentage">quantity</param>
 	public virtual void Grow(float percentage = percentage)
 	{
-		float newAnchorX = mask.rectTransform.anchoredPosition.x + width * 1 / percentage;
-		if (newAnchorX <= barFullAnchorX)
-			mask.rectTransform.anchoredPosition = new Vector2(newAnchorX, barAnchorY);
+		Change(percentage);
 	}
 
 	/// <summary>
@@ -53,9 +60,59 @@ public class BarUI : MonoBehaviour
 	/// <param name="percentage">quantity</param>
 	public virtual void Decrease(float percentage = percentage)
 	{
-		float newAnchorX = mask.rectTransform.anchoredPosition.x - width * 1 / percentage;
-		if (newAnchorX >= barEmptyAnchor.x)
-			mask.rectTransform.anchoredPosition = new Vector2(newAnchorX, barAnchorY);
+		Change(-percentage);
+	}
+
+	/// <summary>
+	/// Changes continuously until reach the percentage given and it takes the given duration. Has a callback.
+	/// </summary>
+	/// <param name="percentage">quantity</param>
+	/// <param name="duration">time</param>
+	/// <returns></returns>
+	public IEnumerator ChangeAnimated(float percentage = percentage, float duration = duration)
+	{
+		modifying = true;
+		float baseX = mask.rectTransform.anchoredPosition.x;
+		float sum = width / percentage;
+		sum += (theoricCurrentX - baseX);
+		if (baseX + sum <= barFullAnchorX && baseX + sum >= barEmptyAnchor.x)
+		{
+			theoricCurrentX = baseX + sum;
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, sum, t), barAnchorY);
+				yield return null;
+			}
+			mask.rectTransform.anchoredPosition = new Vector2(baseX + sum, barAnchorY);
+		}
+		modifying = false;
+	}
+
+	/// <summary>
+	/// Changes continuously until reach the percentage given and it takes the given duration. Has a callback.
+	/// </summary>
+	/// <param name="percentage">quantity</param>
+	/// <param name="duration">time</param>
+	/// <param name="callback">callback</param>
+	/// <returns></returns>
+	public IEnumerator ChangeAnimated(System.Action<bool> callback, float percentage = percentage, float duration = duration)
+	{
+		modifying = true;
+		float baseX = mask.rectTransform.anchoredPosition.x;
+		float sum = width / percentage;
+		sum += (theoricCurrentX - baseX);
+		if (baseX + sum <= barFullAnchorX && baseX + sum >= barEmptyAnchor.x)
+		{
+			theoricCurrentX = baseX + sum;
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, sum, t), barAnchorY);
+				yield return null;
+			}
+			mask.rectTransform.anchoredPosition = new Vector2(baseX + sum, barAnchorY);
+		}
+		modifying = false;
+		callback(true);
 	}
 
 	/// <summary>
@@ -64,21 +121,9 @@ public class BarUI : MonoBehaviour
 	/// <param name="percentage">quantity</param>
 	/// <param name="duration">time</param>
 	/// <returns></returns>
-	public IEnumerator GrowAnimated(float percentage = percentage, float duration = duration)
+	public void GrowAnimated(float percentage = percentage, float duration = duration)
 	{
-		canIModify = false;
-		float baseX = mask.rectTransform.anchoredPosition.x;
-		float sum = width * 1 / percentage;
-		if (baseX + sum <= barFullAnchorX)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, sum, t), barAnchorY);
-				yield return null;
-			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX + sum, barAnchorY);
-		}
-		canIModify = true;
+		StartCoroutine(ChangeAnimated(percentage, duration));
 	}
 
 	/// <summary>
@@ -88,22 +133,15 @@ public class BarUI : MonoBehaviour
 	/// <param name="duration">time</param>
 	/// <param name="callback">callback</param>
 	/// <returns></returns>
-	public IEnumerator GrowAnimated(System.Action<bool> callback, float percentage = percentage, float duration = duration)
+	public void GrowAnimated(System.Action<bool> callback, float percentage = percentage, float duration = duration)
 	{
-		canIModify = false;
-		float baseX = mask.rectTransform.anchoredPosition.x;
-		float sum = width * 1 / percentage;
-		if (baseX + sum <= barFullAnchorX)
+		StartCoroutine(ChangeAnimated((bool callback2) =>
 		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			if(callback2)
 			{
-				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, sum, t), barAnchorY);
-				yield return null;
+				callback(true);
 			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX + sum, barAnchorY);
-		}
-		canIModify = true;
-		callback(true);
+		}, percentage, duration));
 	}
 
 	/// <summary>
@@ -112,21 +150,9 @@ public class BarUI : MonoBehaviour
 	/// <param name="percentage">quantity</param>
 	/// <param name="duration">time</param>
 	/// <returns></returns>
-	public IEnumerator DecreaseAnimated(float percentage = percentage, float duration = duration)
+	public void DecreaseAnimated(float percentage = percentage, float duration = duration)
 	{
-		canIModify = false;
-		float baseX = mask.rectTransform.anchoredPosition.x;
-		float sum = width * 1 / percentage;
-		if (baseX + sum >= barEmptyAnchor.x)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				mask.rectTransform.anchoredPosition = new Vector2(baseX - Mathf.Lerp(0, sum, t), barAnchorY);
-				yield return null;
-			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX - sum, barAnchorY);
-		}
-		canIModify = true;
+		StartCoroutine(ChangeAnimated(-percentage, duration));
 	}
 
 	/// <summary>
@@ -136,22 +162,15 @@ public class BarUI : MonoBehaviour
 	/// <param name="duration">time</param>
 	/// <param name="callback">callback</param>
 	/// <returns></returns>
-	public IEnumerator DecreaseAnimated(System.Action<bool> callback, float percentage = percentage, float duration = duration)
+	public void DecreaseAnimated(System.Action<bool> callback, float percentage = percentage, float duration = duration)
 	{
-		canIModify = false;
-		float baseX = mask.rectTransform.anchoredPosition.x;
-		float sum = width * 1 / percentage;
-		if (baseX + sum >= barEmptyAnchor.x)
+		StartCoroutine(ChangeAnimated((bool callback2) =>
 		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			if (callback2)
 			{
-				mask.rectTransform.anchoredPosition = new Vector2(baseX - Mathf.Lerp(0, sum, t), barAnchorY);
-				yield return null;
+				callback(true);
 			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX - sum, barAnchorY);
-		}
-		canIModify = true;
-		callback(true);
+		}, -percentage, duration));
 	}
 
 	/// <summary>
@@ -170,7 +189,8 @@ public class BarUI : MonoBehaviour
 		mask.rectTransform.anchoredPosition = new Vector2(barFullAnchorX - width, barAnchorY);
 
 		barEmptyAnchor = mask.rectTransform.anchoredPosition;
-		canIModify = true;
+		theoricCurrentX = barEmptyAnchor.x;
+		modifying = false;
 	}
 
 	/// <summary>
@@ -181,17 +201,85 @@ public class BarUI : MonoBehaviour
 		mask.rectTransform.anchoredPosition = barEmptyAnchor;
 	}
 
+	/// <summary>
+	/// Empties the bar in a time.
+	/// </summary>
+	/// <param name="duration">time</param>
+	/// <returns></returns>
+	public IEnumerator EmptyAnimated(float duration = duration)
+	{
+		modifying = true;
+		float baseX = mask.rectTransform.anchoredPosition.x;
+		if (baseX != barEmptyAnchor.x)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, barEmptyAnchor.x, t), barAnchorY);
+				yield return null;
+			}
+			mask.rectTransform.anchoredPosition = new Vector2(baseX + barEmptyAnchor.x, barAnchorY);
+		}
+		modifying = false;
+	}
+
+	/// <summary>
+	/// Empties the bar in a time with a callback.
+	/// </summary>
+	/// <param name="callback">callback</param>
+	/// <param name="duration">time</param>
+	/// <returns></returns>
+	public IEnumerator EmptyAnimated(System.Action<bool> callback, float duration = duration)
+	{
+		modifying = true;
+		float baseX = mask.rectTransform.anchoredPosition.x;
+		if (baseX != barEmptyAnchor.x)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, barEmptyAnchor.x, t), barAnchorY);
+				yield return null;
+			}
+			mask.rectTransform.anchoredPosition = new Vector2(baseX + barEmptyAnchor.x, barAnchorY);
+		}
+		modifying = false;
+		callback(true);
+	}
+
 #if UNITY_EDITOR
 	/// <summary>
 	/// Only in Unity Editor, not on Build.
 	/// </summary>
 	protected void Update()
 	{
+		/*
+		if(Input.GetKeyDown("right"))
+		{
+			if (animate)
+				GrowAnimated();
+			else
+				Grow();
+		}
+		if (Input.GetKeyDown("left"))
+		{
+			if (animate)
+				DecreaseAnimated();
+			else
+				Decrease();
+		}
+		if (Input.GetKeyDown("space"))
+		{
+			if (animate)
+				StartCoroutine(EmptyAnimated());
+			else
+				Empty();
+		}
+
+
 		if (grow)
 		{
 			grow = false;
 			if (animate)
-				StartCoroutine(GrowAnimated());
+				GrowAnimated();
 			else
 				Grow();
 		}
@@ -199,7 +287,7 @@ public class BarUI : MonoBehaviour
 		{
 			decrease = false;
 			if (animate)
-				StartCoroutine(DecreaseAnimated());
+				DecreaseAnimated();
 			else
 				Decrease();
 		}
