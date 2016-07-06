@@ -55,10 +55,11 @@ namespace Tactel.UI
 		private Fading fading;
 		private Scaling scaling;
 
-		private bool changing = false;
+		public bool changing {get; private set;}
 
 		void Awake()
 		{
+			changing = false;
             if (!GameObject.Find("TACTEL"))
 			{
 				GameObject g = new GameObject();
