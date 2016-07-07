@@ -60,15 +60,18 @@ namespace Tactel.UI
 		void Awake()
 		{
 			changing = false;
-            if (!GameObject.Find("TACTEL"))
-			{
-				GameObject g = new GameObject();
-				g.name = "TACTEL";
+			
+			GameObject g = GameObject.Find("TACTEL");
 
-				movement = g.AddComponent<Movement>();
-				fading = g.AddComponent<Fading>();
-				scaling = g.AddComponent<Scaling>();
+			if (!g)
+			{
+				g = new GameObject();
+				g.name = "TACTEL";
 			}
+
+			movement = FindObjectOfType<Movement>() ? FindObjectOfType<Movement>() : g.AddComponent<Movement>();
+			fading = FindObjectOfType<Fading>() ? FindObjectOfType<Fading>() : g.AddComponent<Fading>();
+			scaling = FindObjectOfType<Scaling>() ? FindObjectOfType<Scaling>() : g.AddComponent<Scaling>();
 
 			GameObject UIManagerPositions = GameObject.Find("UIManagerPositions");
 
