@@ -72,7 +72,7 @@ public class BarUI : MonoBehaviour
 	{
 		modifying = true;
 		float baseX = mask.rectTransform.anchoredPosition.x;
-		float sum = width / percentage;
+		float sum = width * percentage / 100;
 		sum += (theoricCurrentX - baseX);
 		if (baseX + sum <= barFullAnchor.x && baseX + sum >= barEmptyAnchor.x)
 		{
@@ -98,7 +98,7 @@ public class BarUI : MonoBehaviour
 	{
 		modifying = true;
 		float baseX = mask.rectTransform.anchoredPosition.x;
-		float sum = width / percentage;
+		float sum = width * percentage / 100;
 		sum += (theoricCurrentX - baseX);
 		if (baseX + sum <= barFullAnchor.x && baseX + sum >= barEmptyAnchor.x)
 		{
@@ -197,6 +197,7 @@ public class BarUI : MonoBehaviour
 	public void Fulfill()
 	{
 		mask.rectTransform.anchoredPosition = barFullAnchor;
+		theoricCurrentX = barFullAnchor.x;
 	}
 
 	/// <summary>
@@ -215,8 +216,9 @@ public class BarUI : MonoBehaviour
 				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, barFullAnchor.x, t), barFullAnchor.y);
 				yield return null;
 			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX + barFullAnchor.x, barFullAnchor.y);
-		}
+			mask.rectTransform.anchoredPosition = barFullAnchor;
+			theoricCurrentX = barFullAnchor.x;
+        }
 		modifying = false;
 	}
 
@@ -237,7 +239,8 @@ public class BarUI : MonoBehaviour
 				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, barFullAnchor.x, t), barFullAnchor.y);
 				yield return null;
 			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX + barFullAnchor.x, barFullAnchor.y);
+			mask.rectTransform.anchoredPosition = barFullAnchor;
+			theoricCurrentX = barFullAnchor.x;
 		}
 		modifying = false;
 		callback(true);
@@ -249,6 +252,7 @@ public class BarUI : MonoBehaviour
 	public void Empty()
 	{
 		mask.rectTransform.anchoredPosition = barEmptyAnchor;
+		theoricCurrentX = barEmptyAnchor.x;
 	}
 
 	/// <summary>
@@ -267,7 +271,8 @@ public class BarUI : MonoBehaviour
 				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, barEmptyAnchor.x, t), barFullAnchor.y);
 				yield return null;
 			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX + barEmptyAnchor.x, barFullAnchor.y);
+			mask.rectTransform.anchoredPosition = barEmptyAnchor;
+			theoricCurrentX = barEmptyAnchor.x;
 		}
 		modifying = false;
 	}
@@ -289,7 +294,8 @@ public class BarUI : MonoBehaviour
 				mask.rectTransform.anchoredPosition = new Vector2(baseX + Mathf.Lerp(0, barEmptyAnchor.x, t), barFullAnchor.y);
 				yield return null;
 			}
-			mask.rectTransform.anchoredPosition = new Vector2(baseX + barEmptyAnchor.x, barFullAnchor.y);
+			mask.rectTransform.anchoredPosition = barEmptyAnchor;
+			theoricCurrentX = barEmptyAnchor.x;
 		}
 		modifying = false;
 		callback(true);
