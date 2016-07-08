@@ -46,11 +46,47 @@ public class Mover : MonoBehaviour
 	{
 		if (ease == Movement.EaseType.Custom)
 		{
+			movement.Move(start.position, end.position, duration, transform, curve);
+		}
+		else
+		{
+			movement.Move(start.position, end.position, duration, transform, ease);
+		}
+	}
+
+	public void MoveAsinc()
+	{
+		if (ease == Movement.EaseType.Custom)
+		{
 			movement.MoveAsinc(start.position, end.position, duration, transform, curve);
 		}
 		else
 		{
 			movement.MoveAsinc(start.position, end.position, duration, transform, ease);
+		}
+	}
+
+	public void MoveAsinc(System.Action<bool> callback)
+	{
+		if (ease == Movement.EaseType.Custom)
+		{
+			movement.MoveAsinc(start.position, end.position, duration, transform, curve, (bool callback2) =>
+			{
+				if(callback2)
+				{
+					callback(true);
+				}
+			});
+		}
+		else
+		{
+			movement.MoveAsinc(start.position, end.position, duration, transform, (bool callback2) =>
+			{
+				if (callback2)
+				{
+					callback(true);
+				}
+			}, ease);
 		}
 	}
 
