@@ -23,7 +23,8 @@ namespace Tactel
 			EaseIn,
 			EaseOut,
 			EaseInOut,
-			Boing
+			Boing,
+			Custom
 		}
 
 		private static Movement instance = null;
@@ -48,7 +49,7 @@ namespace Tactel
 		#region functions
 
 		//Linear
-		public void Linear(Vector2 start, Vector2 end, float duration, Transform movingObject)
+		private void Linear(Vector3 start, Vector3 end, float duration, Transform movingObject)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -56,7 +57,16 @@ namespace Tactel
 			}
 		}
 
-		public IEnumerator LinearAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject, System.Action<bool> callback)
+		private IEnumerator LinearAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				movingObject.position = Mathfx.Lerp(start, end, t);
+				yield return null;
+			}
+		}
+
+		private IEnumerator LinearAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -64,46 +74,10 @@ namespace Tactel
 				yield return null;
 			}
 			callback(true);
-		}
-
-		public IEnumerator LinearAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Lerp(start, end, t);
-				yield return null;
-			}
-		}
-
-		public void Linear(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Lerp(start, end, t);
-			}
-		}
-
-		public IEnumerator LinearAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Lerp(start, end, t);
-				yield return null;
-			}
-			callback(true);
-		}
-
-		public IEnumerator LinearAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Lerp(start, end, t);
-				yield return null;
-			}
 		}
 
 		//Ease in
-		public void EaseIn(Vector2 start, Vector2 end, float duration, Transform movingObject)
+		private void EaseIn(Vector3 start, Vector3 end, float duration, Transform movingObject)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -111,7 +85,16 @@ namespace Tactel
 			}
 		}
 
-		public IEnumerator EaseInAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject, System.Action<bool> callback)
+		private IEnumerator EaseInAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				movingObject.position = Mathfx.Coserp(start, end, t);
+				yield return null;
+			}
+		}
+
+		private IEnumerator EaseInAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -119,46 +102,10 @@ namespace Tactel
 				yield return null;
 			}
 			callback(true);
-		}
-
-		public IEnumerator EaseInAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Coserp(start, end, t);
-				yield return null;
-			}
-		}
-
-		public void EaseIn(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Coserp(start, end, t);
-			}
-		}
-
-		public IEnumerator EaseInAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Coserp(start, end, t);
-				yield return null;
-			}
-			callback(true);
-		}
-
-		public IEnumerator EaseInAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Coserp(start, end, t);
-				yield return null;
-			}
 		}
 
 		//Ease out
-		public void EaseOut(Vector2 start, Vector2 end, float duration, Transform movingObject)
+		private void EaseOut(Vector3 start, Vector3 end, float duration, Transform movingObject)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -166,7 +113,16 @@ namespace Tactel
 			}
 		}
 
-		public IEnumerator EaseOutAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject, System.Action<bool> callback)
+		private IEnumerator EaseOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				movingObject.position = Mathfx.Sinerp(start, end, t);
+				yield return null;
+			}
+		}
+
+		private IEnumerator EaseOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -174,46 +130,10 @@ namespace Tactel
 				yield return null;
 			}
 			callback(true);
-		}
-
-		public IEnumerator EaseOutAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Sinerp(start, end, t);
-				yield return null;
-			}
-		}
-
-		public void EaseOut(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Sinerp(start, end, t);
-			}
-		}
-
-		public IEnumerator EaseOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Sinerp(start, end, t);
-				yield return null;
-			}
-			callback(true);
-		}
-
-		public IEnumerator EaseOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Sinerp(start, end, t);
-				yield return null;
-			}
 		}
 
 		//Ease in out
-		public void EaseInOut(Vector2 start, Vector2 end, float duration, Transform movingObject)
+		private void EaseInOut(Vector3 start, Vector3 end, float duration, Transform movingObject)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -221,7 +141,16 @@ namespace Tactel
 			}
 		}
 
-		public IEnumerator EaseInOutAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject, System.Action<bool> callback)
+		private IEnumerator EaseInOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				movingObject.position = Mathfx.Hermite(start, end, t);
+				yield return null;
+			}
+		}
+
+		private IEnumerator EaseInOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -229,46 +158,10 @@ namespace Tactel
 				yield return null;
 			}
 			callback(true);
-		}
-
-		public IEnumerator EaseInOutAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Hermite(start, end, t);
-				yield return null;
-			}
-		}
-
-		public void EaseInOut(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Hermite(start, end, t);
-			}
-		}
-
-		public IEnumerator EaseInOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Hermite(start, end, t);
-				yield return null;
-			}
-			callback(true);
-		}
-
-		public IEnumerator EaseInOutAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Hermite(start, end, t);
-				yield return null;
-			}
 		}
 
 		//Ease Boing
-		public void Boing(Vector2 start, Vector2 end, float duration, Transform movingObject)
+		private void Boing(Vector3 start, Vector3 end, float duration, Transform movingObject)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -276,7 +169,16 @@ namespace Tactel
 			}
 		}
 
-		public IEnumerator BoingAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject, System.Action<bool> callback)
+		private IEnumerator BoingAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				movingObject.position = Mathfx.Berp(start, end, t);
+				yield return null;
+			}
+		}
+
+		private IEnumerator BoingAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
@@ -286,64 +188,38 @@ namespace Tactel
 			callback(true);
 		}
 
-		public IEnumerator BoingAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject)
+		//Ease Custom (AnimationCurve)
+		private void Custom(Vector3 start, Vector3 end, float duration, Transform movingObject, AnimationCurve curve)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
-				movingObject.position = Mathfx.Berp(start, end, t);
+				movingObject.position = Mathfx.Lerp(start, end, curve.Evaluate(t));
+			}
+		}
+
+		private IEnumerator CustomAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, AnimationCurve curve)
+		{
+			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
+			{
+				movingObject.position = Mathfx.Lerp(start, end, curve.Evaluate(t));
 				yield return null;
 			}
 		}
 
-		public void Boing(Vector3 start, Vector3 end, float duration, Transform movingObject)
+		private IEnumerator CustomAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, AnimationCurve curve, System.Action<bool> callback)
 		{
 			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
 			{
-				movingObject.position = Mathfx.Berp(start, end, t);
-			}
-		}
-
-		public IEnumerator BoingAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Berp(start, end, t);
+				movingObject.position = Mathfx.Lerp(start, end, curve.Evaluate(t));
 				yield return null;
 			}
 			callback(true);
-		}
-
-		public IEnumerator BoingAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject)
-		{
-			for (float t = 0.0f; t <= 1.0f; t += Time.deltaTime / duration)
-			{
-				movingObject.position = Mathfx.Berp(start, end, t);
-				yield return null;
-			}
 		}
 
 		/////////////////////////////////////
-
-		public void Move(Vector2 start, Vector2 end, float duration, Transform movingObject, Movement.EaseType easetype = Movement.EaseType.Linear)
+		public void Move(Vector3 start, Vector3 end, float duration, Transform movingObject, AnimationCurve curve)
 		{
-			switch (easetype)
-			{
-				case Movement.EaseType.Linear:
-					Movement.Instance.Linear(start, end, duration, movingObject);
-					break;
-				case Movement.EaseType.EaseIn:
-					Movement.Instance.EaseIn(start, end, duration, movingObject);
-					break;
-				case Movement.EaseType.EaseOut:
-					Movement.Instance.EaseOut(start, end, duration, movingObject);
-					break;
-				case Movement.EaseType.EaseInOut:
-					Movement.Instance.EaseInOut(start, end, duration, movingObject);
-					break;
-				case Movement.EaseType.Boing:
-					Movement.Instance.Boing(start, end, duration, movingObject);
-					break;
-			}
+			Custom(start, end, duration, movingObject, curve);
 		}
 
 		public void Move(Vector3 start, Vector3 end, float duration, Transform movingObject, Movement.EaseType easetype = Movement.EaseType.Linear)
@@ -368,26 +244,9 @@ namespace Tactel
 			}
 		}
 
-		public void MoveAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject, Movement.EaseType easetype = Movement.EaseType.Linear)
+		public void MoveAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, AnimationCurve curve)
 		{
-			switch (easetype)
-			{
-				case Movement.EaseType.Linear:
-					StartCoroutine(Movement.Instance.LinearAsinc(start, end, duration, movingObject));
-					break;
-				case Movement.EaseType.EaseIn:
-					StartCoroutine(Movement.Instance.EaseInAsinc(start, end, duration, movingObject));
-					break;
-				case Movement.EaseType.EaseOut:
-					StartCoroutine(Movement.Instance.EaseOutAsinc(start, end, duration, movingObject));
-					break;
-				case Movement.EaseType.EaseInOut:
-					StartCoroutine(Movement.Instance.EaseInOutAsinc(start, end, duration, movingObject));
-					break;
-				case Movement.EaseType.Boing:
-					StartCoroutine(Movement.Instance.BoingAsinc(start, end, duration, movingObject));
-					break;
-			}
+			StartCoroutine(CustomAsinc(start, end, duration, movingObject, curve));
 		}
 
 		public void MoveAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, Movement.EaseType easetype = Movement.EaseType.Linear)
@@ -412,56 +271,15 @@ namespace Tactel
 			}
 		}
 
-		public void MoveAsinc(Vector2 start, Vector2 end, float duration, Transform movingObject, System.Action<bool> callback, Movement.EaseType easetype = Movement.EaseType.Linear)
+		public void MoveAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, AnimationCurve curve, System.Action<bool> callback)
 		{
-			switch (easetype)
+			StartCoroutine(CustomAsinc(start, end, duration, movingObject, curve, (bool callback2) =>
 			{
-				case Movement.EaseType.Linear:
-					StartCoroutine(Movement.Instance.LinearAsinc(start, end, duration, movingObject, (bool callback2) =>
-					{
-						if (callback2)
-						{
-							callback(true);
-						}
-					}));
-					break;
-				case Movement.EaseType.EaseIn:
-					StartCoroutine(Movement.Instance.EaseInAsinc(start, end, duration, movingObject, (bool callback2) =>
-					{
-						if (callback2)
-						{
-							callback(true);
-						}
-					}));
-					break;
-				case Movement.EaseType.EaseOut:
-					StartCoroutine(Movement.Instance.EaseOutAsinc(start, end, duration, movingObject, (bool callback2) =>
-					{
-						if (callback2)
-						{
-							callback(true);
-						}
-					}));
-					break;
-				case Movement.EaseType.EaseInOut:
-					StartCoroutine(Movement.Instance.EaseInOutAsinc(start, end, duration, movingObject, (bool callback2) =>
-					{
-						if (callback2)
-						{
-							callback(true);
-						}
-					}));
-					break;
-				case Movement.EaseType.Boing:
-					StartCoroutine(Movement.Instance.BoingAsinc(start, end, duration, movingObject, (bool callback2) =>
-					{
-						if (callback2)
-						{
-							callback(true);
-						}
-					}));
-					break;
-			}
+				if (callback2)
+				{
+					callback(true);
+				}
+			}));
 		}
 
 		public void MoveAsinc(Vector3 start, Vector3 end, float duration, Transform movingObject, System.Action<bool> callback, Movement.EaseType easetype = Movement.EaseType.Linear)
@@ -515,7 +333,6 @@ namespace Tactel
 					break;
 			}
 		}
-
 		#endregion
 	}
 }
