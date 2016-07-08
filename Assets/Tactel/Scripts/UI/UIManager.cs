@@ -179,7 +179,12 @@ namespace Tactel.UI
 
 		void Start()
 		{
+			//Don't know why I am needing this.
+			foreach (UIMovableElement l in movableElements)
+				l.transform.position = l.outPosition;
+
 #if UNITY_EDITOR
+			currentView = theView;
 			Reset(theView);
 #else
 			Reset();
@@ -199,7 +204,7 @@ namespace Tactel.UI
 
 			if (goalParts[0] == currentParts[0])
 			{
-				if (int.Parse(goalParts[1]) > int.Parse(currentParts[1]))
+				if (goalParts.Length == 2 && currentParts.Length == 2 && int.Parse(goalParts[1]) > int.Parse(currentParts[1]))
 				{
 					sequence.Add(goal);
 					UIViews nextView;
@@ -216,7 +221,7 @@ namespace Tactel.UI
 					sequence.Reverse();
 					return sequence;
 				}
-				else if (int.Parse(goalParts[1]) < int.Parse(currentParts[1]))
+				else if (goalParts.Length == 2 && currentParts.Length == 2 && int.Parse(goalParts[1]) < int.Parse(currentParts[1]))
 				{
 					sequence.Add(currentView);
 					UIViews nextView;
