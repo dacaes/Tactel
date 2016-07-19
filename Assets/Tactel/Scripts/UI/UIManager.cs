@@ -25,17 +25,18 @@ namespace Tactel.UI
 			Anim_1 = (1 << 3),
 			Anim_2 = (1 << 4),
 			Anim_3 = (1 << 5),
+			Settings = (1 << 6)
 		}
 
-		[System.Serializable] public class Delay {public UIViews view; public float delay; }
+		[System.Serializable] public class Delay { public UIViews view; public float delay; }
 
 #if UNITY_EDITOR
 		public bool changeView;
 		public UIViews theView;
 #endif
-		[Header("Anim back. Default true")]
-		[SerializeField]
-		private bool reverseAnimation = true;
+		//[Header("Anim back. Default true")]
+		//[SerializeField]
+		private const bool REVERSE_ANIMATION = true;
 
 		[Header("UI Elements")]
 		public List<UIMovableElement> movableElements = new List<UIMovableElement>();
@@ -49,18 +50,17 @@ namespace Tactel.UI
 
 		private UIViews currentView;
 		private UIViews auxView;
-		private bool secondaryMode;
 
 		private Movement movement;
 		private Fading fading;
 		private Scaling scaling;
 
-		public bool changing {get; private set;}
+		public bool changing { get; private set; }
 
 		void Awake()
 		{
 			changing = false;
-			
+
 			GameObject g = GameObject.Find("TACTEL");
 
 			if (!g)
@@ -95,14 +95,14 @@ namespace Tactel.UI
 							}
 						}
 
-						if(!element.inTransform)	//By default its position is In position
+						if (!element.inTransform)   //By default its position is In position
 						{
 							Debug.LogWarning("No In position found. Got " + element.transform.name + " position for In by default.");
-							element.inTransform = element.transform;	//we get the position and store it after.
+							element.inTransform = element.transform;    //we get the position and store it after.
 						}
 					}
 
-					if(!element.outTransform)
+					if (!element.outTransform)
 					{
 						Debug.LogError(element.transform.name + " has no Out position for its movement.");
 					}
@@ -115,7 +115,6 @@ namespace Tactel.UI
 
 				element.outPosition = element.outTransform.position;
 				element.inPosition = element.inTransform.position;
-
 
 				element.transform.position = element.outPosition;
 				element.onView = false;
@@ -179,12 +178,11 @@ namespace Tactel.UI
 
 		void Start()
 		{
-			//Don't know why I am needing this.
+			//Don't know why I am needing this =S
 			foreach (UIMovableElement l in movableElements)
 				l.transform.position = l.outPosition;
 
 #if UNITY_EDITOR
-			currentView = theView;
 			Reset(theView);
 #else
 			Reset();
@@ -196,7 +194,7 @@ namespace Tactel.UI
 			ChangeView(view);
 		}
 
-		List<UIViews> CreateSequences(UIViews goal)
+		List<UIViews> CreateSequences(UIViews goal, bool reverseAnimation = REVERSE_ANIMATION)
 		{
 			List<UIViews> sequence = new List<UIViews>();
 			string[] goalParts = goal.ToString().Split('_');
@@ -273,7 +271,7 @@ namespace Tactel.UI
 					forwardSequence.Reverse();
 				}
 
-				foreach(UIViews v in forwardSequence)
+				foreach (UIViews v in forwardSequence)
 				{
 					sequence.Add(v);
 				}
@@ -288,67 +286,200 @@ namespace Tactel.UI
 			{
 				if (!changing)
 				{
-					if (secondaryMode)
+					Change(sequence[i], (bool callback0) =>
 					{
-						Change(sequence[i], (bool callback0) =>
+						if (callback0)
 						{
-							if (callback0)
+							//look for a delay after the view
+							bool delay = false;
+							foreach (Delay d in delays)
 							{
-								//look for a delay after the view
-								bool delay = false;
-								foreach (Delay d in delays)
+								if (d.view == sequence[i])
 								{
-									if (d.view == sequence[i])
+									delay = true;
+									StartCoroutine(WaitForSeconds(d.delay, (bool callback2) =>
 									{
-										delay = true;
-										StartCoroutine(WaitForSeconds(d.delay, (bool callback2) =>
-										{
-											changing = false;
-											i++;
-										}));
-									}
-								}
-								if (!delay)
-								{
-									changing = false;
-									i++;
+										changing = false;
+										i++;
+									}));
 								}
 							}
-						});
-					}
-					else
-					{
-						Change2(sequence[i], (bool callback0) =>
-						{
-							if (callback0)
+							if (!delay)
 							{
-								//look for a delay after the view
-								bool delay = false;
-								foreach (Delay d in delays)
-								{
-									if (d.view == sequence[i])
-									{
-										delay = true;
-										StartCoroutine(WaitForSeconds(d.delay, (bool callback2) =>
-										{
-											changing = false;
-											i++;
-										}));
-									}
-								}
-								if (!delay)
-								{
-									changing = false;
-									i++;
-								}
+								changing = false;
+								i++;
 							}
-						});
-					}
+						}
+					});
 				}
 				yield return null;
 			}
-			
+
 			callback(true);
+		}
+
+		IEnumerator EnterSequence(List<UIViews> sequence, System.Action<bool> callback)
+		{
+			for (int i = 0; i < sequence.Count;)
+			{
+				if (!changing)
+				{
+					Enter(sequence[i], (bool callback0) =>
+					{
+						if (callback0)
+						{
+							//look for a delay after the view
+							bool delay = false;
+							foreach (Delay d in delays)
+							{
+								if (d.view == sequence[i])
+								{
+									delay = true;
+									StartCoroutine(WaitForSeconds(d.delay, (bool callback2) =>
+									{
+										changing = false;
+										i++;
+									}));
+								}
+							}
+							if (!delay)
+							{
+								changing = false;
+								i++;
+							}
+						}
+					});
+				}
+				yield return null;
+			}
+
+			callback(true);
+		}
+
+		IEnumerator LeaveSequence(List<UIViews> sequence, System.Action<bool> callback, bool leaveSentView = false)
+		{
+			for (int i = 0; i < sequence.Count;)
+			{
+				if (!changing)
+				{
+					Leave(sequence[i], (bool callback0) =>
+					{
+						if (callback0)
+						{
+							//look for a delay after the view
+							bool delay = false;
+							foreach (Delay d in delays)
+							{
+								if (d.view == sequence[i])
+								{
+									delay = true;
+									StartCoroutine(WaitForSeconds(d.delay, (bool callback2) =>
+									{
+										changing = false;
+										i++;
+									}));
+								}
+							}
+							if (!delay)
+							{
+								changing = false;
+								i++;
+							}
+						}
+					}, leaveSentView);
+				}
+				yield return null;
+			}
+
+			callback(true);
+		}
+
+		public void AddView(UIViews view, bool direct = false)
+		{
+			Debug.Log("--------------Change view to: " + view);
+
+			if (!direct)
+			{
+				StartCoroutine(EnterSequence(CreateSequences(view, false), (bool callback) => { }));
+			}
+			else
+			{
+				List<UIViews> list = new List<UIViews>();
+				list.Add(view);
+				StartCoroutine(EnterSequence(list, (bool callback) => { }));
+			}
+		}
+
+		public void AddView(UIViews view, System.Action<bool> callback, bool direct = false)
+		{
+			Debug.Log("--------------Change view to: " + view);
+
+			if (!direct)
+			{
+				StartCoroutine(EnterSequence(CreateSequences(view), (bool callback2) =>
+				{
+					if (callback2)
+					{
+						callback(true);
+					}
+				}));
+			}
+			else
+			{
+				List<UIViews> list = new List<UIViews>();
+				list.Add(view);
+				StartCoroutine(EnterSequence(list, (bool callback2) =>
+				{
+					if (callback2)
+					{
+						callback(true);
+					}
+				}));
+			}
+		}
+
+		public void LeaveView(UIViews view, bool direct = false)
+		{
+			Debug.Log("--------------Change view to: " + view);
+
+			if (!direct)
+			{
+				StartCoroutine(LeaveSequence(CreateSequences(view, false), (bool callback) => { }, true));
+			}
+			else
+			{
+				List<UIViews> list = new List<UIViews>();
+				list.Add(view);
+				StartCoroutine(LeaveSequence(list, (bool callback) => { }, true));
+			}
+		}
+
+		public void LeaveView(UIViews view, System.Action<bool> callback, bool direct = false)
+		{
+			Debug.Log("--------------Change view to: " + view);
+
+			if (!direct)
+			{
+				StartCoroutine(LeaveSequence(CreateSequences(view), (bool callback2) =>
+				{
+					if (callback2)
+					{
+						callback(true);
+					}
+				}));
+			}
+			else
+			{
+				List<UIViews> list = new List<UIViews>();
+				list.Add(view);
+				StartCoroutine(LeaveSequence(list, (bool callback2) =>
+				{
+					if (callback2)
+					{
+						callback(true);
+					}
+				}));
+			}
 		}
 
 		public void ChangeView(UIViews view, bool direct = false)
@@ -394,8 +525,27 @@ namespace Tactel.UI
 				}));
 			}
 		}
-
 		void Change(UIViews view, System.Action<bool> callback0)
+		{
+			changing = true;
+			currentView = view;
+
+			Leave(view, (bool callback1) =>
+			{
+				if(callback1)
+				{
+					Enter(view, (bool callback2) =>
+					{
+						if (callback2)
+						{
+							callback0(true);
+						}
+					});
+				}
+			});
+		}
+
+		void Leave(UIViews view, System.Action<bool> callback0, bool leaveSentView = false)
 		{
 			changing = true;
 			currentView = view;
@@ -403,9 +553,6 @@ namespace Tactel.UI
 			bool leaveMovables = false;
 			bool leaveFadeables = false;
 			bool leaveScalables = false;
-			bool enterMovables = false;
-			bool enterFadeables = false;
-			bool enterScalables = false;
 
 			LeaveMovables((bool callback) =>
 			{
@@ -415,49 +562,10 @@ namespace Tactel.UI
 					if (leaveFadeables && leaveScalables)
 					{
 						leaveMovables = false;  //not double path
-						LeaveToggleables();
-						EnterMovables((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterMovables = true;
-								if (enterFadeables && enterScalables)
-								{
-									enterMovables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
-						EnterFadings((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterFadeables = true;
-								if (enterMovables && enterScalables)
-								{
-									enterFadeables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
-						EnterScalables((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterScalables = true;
-								if (enterMovables && enterFadeables)
-								{
-									enterScalables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
+						callback0(true);
 					}
 				}
-			});
+			}, leaveSentView);
 
 			LeaveFadings((bool callback) =>
 			{
@@ -467,49 +575,10 @@ namespace Tactel.UI
 					if (leaveMovables && leaveScalables)
 					{
 						leaveFadeables = false;  //not double path
-						LeaveToggleables();
-						EnterMovables((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterMovables = true;
-								if (enterFadeables && enterScalables)
-								{
-									enterMovables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
-						EnterFadings((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterFadeables = true;
-								if (enterMovables && enterScalables)
-								{
-									enterFadeables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
-						EnterScalables((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterScalables = true;
-								if (enterMovables && enterFadeables)
-								{
-									enterScalables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
+						callback0(true);
 					}
 				}
-			});
+			}, leaveSentView);
 
 			LeaveScalables((bool callback) =>
 			{
@@ -519,52 +588,54 @@ namespace Tactel.UI
 					if (leaveMovables && leaveFadeables)
 					{
 						leaveScalables = false;  //not double path
-						LeaveToggleables();
-						EnterMovables((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterMovables = true;
-								if (enterFadeables && enterScalables)
-								{
-									enterMovables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
-						EnterFadings((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterFadeables = true;
-								if (enterMovables && enterScalables)
-								{
-									enterFadeables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
-						EnterScalables((bool callback2) =>
-						{
-							if (callback2)
-							{
-								enterScalables = true;
-								if (enterMovables && enterFadeables)
-								{
-									enterScalables = false;  //not double path
-									EnterToggleables();
-									callback0(true);
-								}
-							}
-						});
+						callback0(true);
 					}
 				}
-			});
+			}, leaveSentView);
+
+			LeaveToggleables(leaveSentView);
 		}
 
-		void Change2(UIViews view, System.Action<bool> callback0)
+		void Enter(UIViews view, System.Action<bool> callback0)
+		{
+			changing = true;
+			currentView = view;
+
+			bool enterMovables = false;
+			bool enterFadeables = false;
+			bool enterScalables = false;
+
+			EnterMovables((bool callback2) =>
+			{
+				enterMovables = true;
+				if (enterFadeables && enterScalables)
+				{
+					enterMovables = false;  //not double path
+					callback0(true);
+				}
+			});
+			EnterFadings((bool callback2) =>
+			{
+				enterFadeables = true;
+				if (enterMovables && enterScalables)
+				{
+					enterFadeables = false;  //not double path
+					callback0(true);
+				}
+			});
+			EnterScalables((bool callback2) =>
+			{
+				enterScalables = true;
+				if (enterMovables && enterFadeables)
+				{
+					enterScalables = false;  //not double path
+					callback0(true);
+				}
+			});
+			EnterToggleables();
+		}
+
+		void ChangeOld(UIViews view, System.Action<bool> callback0)
 		{
 			changing = true;
 			currentView = view;
@@ -587,12 +658,12 @@ namespace Tactel.UI
 						EnterMovables((bool callback2) =>
 						{
 							enterMovables = true;
-							if(enterFadeables && enterScalables)
+							if (enterFadeables && enterScalables)
 							{
 								enterMovables = false;  //not double path
 								callback0(true);
 							}
-                        });
+						});
 						EnterFadings((bool callback2) =>
 						{
 							enterFadeables = true;
@@ -748,7 +819,7 @@ namespace Tactel.UI
 			return true;
 		}
 
-		bool LeaveMovables(System.Action<bool> callback)
+		bool LeaveMovables(System.Action<bool> callback, bool leaveSentView = false)
 		{
 			//Debug.Log("Leave movables.");
 
@@ -756,9 +827,19 @@ namespace Tactel.UI
 
 			foreach (UIMovableElement element in movableElements)
 			{
-				if (!((element.views & currentView) != 0) && element.onView)    //movable leave
+				if (!leaveSentView)
 				{
-					changingElements.Add(element);
+					if (!((element.views & currentView) != 0) && element.onView)    //movable leave
+					{
+						changingElements.Add(element);
+					}
+				}
+				else
+				{
+					if ((element.views & currentView) != 0 && element.onView)    //movable leave
+					{
+						changingElements.Add(element);
+					}
 				}
 			}
 
@@ -847,7 +928,7 @@ namespace Tactel.UI
 			return true;
 		}
 
-		bool LeaveFadings(System.Action<bool> callback)
+		bool LeaveFadings(System.Action<bool> callback, bool leaveSentView = false)
 		{
 			//Debug.Log("Leave Fadings.");
 
@@ -855,9 +936,19 @@ namespace Tactel.UI
 
 			foreach (UIFadingElement element in fadingElements)
 			{
-				if (!((element.views & currentView) != 0) && element.onView)    //Fading leave
+				if (!leaveSentView)
 				{
-					changingElements.Add(element);
+					if (!((element.views & currentView) != 0) && element.onView)    //Fading leave
+					{
+						changingElements.Add(element);
+					}
+				}
+				else
+				{
+					if ((element.views & currentView) != 0 && element.onView)    //Fading leave
+					{
+						changingElements.Add(element);
+					}
 				}
 			}
 
@@ -921,15 +1012,26 @@ namespace Tactel.UI
 			}
 		}
 
-		void LeaveToggleables()
+		void LeaveToggleables(bool leaveSentView = false)
 		{
 			//Debug.Log("Leave toggleables.");
 			foreach (UIToggleableElement element in toggleableElements)
 			{
-				if (!((element.views & currentView) != 0) && element.onView)    //toggleable leave
+				if (!leaveSentView)
 				{
-					element.onView = false;
-					element.transform.gameObject.SetActive(false);
+					if (!((element.views & currentView) != 0) && element.onView)    //toggleable leave
+					{
+						element.onView = false;
+						element.transform.gameObject.SetActive(false);
+					}
+				}
+				else
+				{
+					if ((element.views & currentView) != 0 && element.onView)    //toggleable leave
+					{
+						element.onView = false;
+						element.transform.gameObject.SetActive(false);
+					}
 				}
 			}
 		}
@@ -983,7 +1085,7 @@ namespace Tactel.UI
 			return true;
 		}
 
-		bool LeaveScalables(System.Action<bool> callback)
+		bool LeaveScalables(System.Action<bool> callback, bool leaveSentView = false)
 		{
 			//Debug.Log("Leave scalables.");
 
@@ -991,9 +1093,19 @@ namespace Tactel.UI
 
 			foreach (UIScalableElement element in scalableElements)
 			{
-				if (!((element.views & currentView) != 0) && element.onView)    //scalable leave
+				if (leaveSentView)
 				{
-					changingElements.Add(element);
+					if (!((element.views & currentView) != 0) && element.onView)    //scalable leave
+					{
+						changingElements.Add(element);
+					}
+				}
+				else
+				{
+					if ((element.views & currentView) != 0 && element.onView)    //scalable leave
+					{
+						changingElements.Add(element);
+					}
 				}
 			}
 
@@ -1047,7 +1159,7 @@ namespace Tactel.UI
 
 			string[] parts = viewString.Split('_');
 
-			if(parts.Length == 2)
+			if (parts.Length == 2)
 			{
 				int nextViewNumber = int.Parse(parts[1]);
 				if (!previous)
@@ -1056,7 +1168,7 @@ namespace Tactel.UI
 				}
 				else
 				{
-					nextViewNumber--;	//Find previous
+					nextViewNumber--;   //Find previous
 				}
 
 				if (nextView.TryParse<UIViews>((parts[0] + "_" + nextViewNumber), out nextView))
