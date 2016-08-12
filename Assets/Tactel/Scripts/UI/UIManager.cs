@@ -171,7 +171,7 @@ namespace Tactel.UI
 					element.duration = 1;
 				}
 
-				element.transform.localScale = new Vector2(0, 0);
+				element.transform.localScale = new Vector3(0, 0, 0);
 				element.onView = false;
 			}
 		}
@@ -1069,11 +1069,11 @@ namespace Tactel.UI
 				}
 				if (i != changingElements.Count) //last one
 				{
-					scaling.ScaleAsinc(new Vector2(0, 0), new Vector2(1, 1), element.duration, element.transform, element.easeType);
+					scaling.ScaleAsinc(new Vector3(0, 0, 0), new Vector3(1, 1, 1), element.duration, element.transform, element.easeType);
 				}
 				else
 				{
-					scaling.ScaleAsinc(new Vector2(0, 0), new Vector2(1, 1), element.duration, element.transform, (bool callback2) =>
+					scaling.ScaleAsinc(new Vector3(0, 0, 0), new Vector3(1, 1, 1), element.duration, element.transform, (bool callback2) =>
 					{
 						if (callback2) //last one
 						{
@@ -1136,11 +1136,11 @@ namespace Tactel.UI
 
 				if (i != changingElements.Count)
 				{
-					scaling.ScaleAsinc(new Vector2(1, 1), new Vector2(0, 0), element.duration, element.transform, ease);
+					scaling.ScaleAsinc(new Vector3(1, 1, 1), new Vector3(0, 0, 0), element.duration, element.transform, ease);
 				}
 				else //last one
 				{
-					scaling.ScaleAsinc(new Vector2(1, 1), new Vector2(0, 0), element.duration, element.transform, (bool callback2) =>
+					scaling.ScaleAsinc(new Vector3(1, 1, 1), new Vector3(0, 0, 0), element.duration, element.transform, (bool callback2) =>
 					{
 						if (callback2)
 						{
